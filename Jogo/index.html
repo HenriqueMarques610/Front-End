@@ -14,43 +14,104 @@
             <div class="small-6 columns">
                 <h1 class="text-center">YOU</h1>
                 <div class="healthbar">
-                    <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                    <div class="healthbar text-center" v-bind:style="{width:playerHealth+'%'}" style="background-color: green; margin: 0; color: white;">
+                        {{playerHealth}}
                     </div>
                 </div>
             </div>
             <div class="small-6 columns">
                 <h1 class="text-center">MONSTER</h1>
                 <div class="healthbar">
-                    <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
-
+                    <div class="healthbar text-center" v-bind:style="{width:playerHealth+'%'}" style="background-color: green; margin: 0; color: white;">
+                        {{monsterHealth}}
                     </div>
                 </div>
             </div>
         </section>
-        <section class="row controls">
+        <section class="row controls" v-if="!gameIsRunning">
             <div class="small-12 columns">
-                <button id="start-game">START NEW GAME</button>
+                <button @click="startGame" id="start-game">START NEW GAME</button>
             </div>
         </section>
-        <section class="row controls">
+        <section class="row controls" v-else>
             <div class="small-12 columns">
-                <button id="attack">ATTACK</button>
-                <button id="special-attack">SPECIAL ATTACK</button>
-                <button id="heal">HEAL</button>
-                <button id="give-up">GIVE UP</button>
+                <button id="attack" @click="attack">ATTACK</button>
+                <button id="special-attack" @click="specialAttack">SPECIAL ATTACK</button>
+                <button id="heal" @click="heal">HEAL</button>
+                <button id="give-up" @click="giveUp">GIVE UP</button>
             </div>
         </section>
         <section class="row log">
             <div class="small-12 columns">
                 <ul>
-                    <li>
+                    <li v-for="item in turns">
 
                     </li>
                 </ul>
             </div>
         </section>
     </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                playerHealth:50,
+                monsterHealth:100,
+                gameIsRunning:false,
+
+            },
+            methods:{
+                startGame:function(){
+                    this.gameIsRunning=true;
+                    this.playerHealth=100;
+                    this.monsterHealth=100;
+                },
+                attack: function(){
+                    this.monsterHealth-=this.calculateDamage(3,11);
+                    if(this.monsterHealth<=0){
+                        this.monsterHealth=0;
+                        alert('Ganhou')
+                        this.gameIsRunning=false;
+                    }
+                    this.playerHealth-=this.calculateDamage(3,10);
+                    if(this.playerHealth<=0){
+                        this.playerHealth=0;
+                        alert('Perdeu')
+                        this.gameIsRunning=false;
+                    }
+                },
+                specialAttack: function(){
+                    this.monsterHealth-=this.calculateDamage(3,30);
+                    if(this.monsterHealth<=0){
+                        this.monsterHealth=0;
+                        alert('Ganhou')
+                        this.gameIsRunning=false;
+                    }
+                    this.playerHealth-=this.calculateDamage(3,10);
+                    if(this.playerHealth<=0){
+                        this.playerHealth=0;
+                        alert('Perdeu')
+                        this.gameIsRunning=false;
+                    }
+                },
+                heal:function(){
+                    this.playerHealth+=this.calculateDamage(3,30);
+                    this.playerHealth+=this.calculateDamage(3,10);
+                    if(this.playerHealth<=0){
+                        this.playerHealth=0;
+                        this.gameIsRunning=false;
+                    }
+                },
+                giveUp:function(){
+                    alert('Nem pensar nisso')
+                    this.startGame
+                },
+                calculateDamage(min,max){
+                    return Math.max(Math.floor(Math.random()*max)+1, min);
+                }
+            }
+        })
+    </script>
 </body>
 
 </html>
