@@ -44,36 +44,59 @@
         <section class="row log">
             <div class="small-12 columns">
                 <ul>
-                    <li v-for="item in turns">
-
-                    </li>
+                    <transition-group name='fade' appear>
+                        <li v-for="turn in turns" :key="turn.text" :class="{'player-turn': turn.isPlayer, 'monster-turn': !turn.isPlayer}">
+                        {{turn.text}}
+                        </li>
+                    </transition-group>
                 </ul>
             </div>
         </section>
     </div>
+    <style>
+        .fade-enter-active{
+            transition: opacity 1.5s
+        }
+        .fade-enter{
+            opacity:0;
+        }
+    </style>
     <script>
         new Vue({
             el:"#app",
             data:{
-                playerHealth:50,
+                playerHealth:100,
                 monsterHealth:100,
                 gameIsRunning:false,
-
+                turns:[]
             },
             methods:{
                 startGame:function(){
                     this.gameIsRunning=true;
                     this.playerHealth=100;
                     this.monsterHealth=100;
+                    this.turns=[];
+                    create_id:0;
                 },
                 attack: function(){
-                    this.monsterHealth-=this.calculateDamage(3,11);
+                    damagePlayer=this.calculateDamage(3,11);
+                    this.monsterHealth-=damagePlayer
+                    this.turns.unshift({
+                        id:this.create_id,
+                        isPlayer:true,
+                        text:'Player hits Monster for '+damagePlayer
+                    })
                     if(this.monsterHealth<=0){
                         this.monsterHealth=0;
                         alert('Ganhou')
                         this.gameIsRunning=false;
                     }
-                    this.playerHealth-=this.calculateDamage(3,10);
+                    damageMonster=this.calculateDamage(3,10);
+                    this.playerHealth-=damageMonster
+                    this.turns.unshift({
+                        isPlayer:false,
+                        text:'Monster hits Player for '+damageMonster
+                    })
                     if(this.playerHealth<=0){
                         this.playerHealth=0;
                         alert('Perdeu')
@@ -81,14 +104,24 @@
                     }
                 },
                 specialAttack: function(){
-                    this.monsterHealth-=this.calculateDamage(3,30);
+                    damagePlayer=this.calculateDamage(3,30);
+                    this.monsterHealth-=damagePlayer
+                    this.turns.unshift({
+                        isPlayer:true,
+                        text:'Player hits Monster for '+damagePlayer
+                    })
                     if(this.monsterHealth<=0){
                         this.monsterHealth=0;
                         alert('Ganhou')
                         this.gameIsRunning=false;
                     }
-                    this.playerHealth-=this.calculateDamage(3,10);
-                    if(this.playerHealth<=0){
+                    damageMonster=this.calculateDamage(3,10);
+                    this.playerHealth-=damageMonster
+                    this.turns.unshift({
+                        isPlayer:false,
+                        text:'Monster hits Player for '+damageMonster
+                    })
+                    if(this.playerHealth<=0){ 
                         this.playerHealth=0;
                         alert('Perdeu')
                         this.gameIsRunning=false;
@@ -101,10 +134,14 @@
                         this.playerHealth=0;
                         this.gameIsRunning=false;
                     }
+                    else if(this.playerHealth>=100){
+                        this.playerHealth=100
+                        alert('A vida ja esta no maximo')
+                    }
                 },
                 giveUp:function(){
                     alert('Nem pensar nisso')
-                    this.startGame
+                    this.gameIsRunning=false;
                 },
                 calculateDamage(min,max){
                     return Math.max(Math.floor(Math.random()*max)+1, min);
