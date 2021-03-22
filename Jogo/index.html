@@ -132,8 +132,12 @@
                     }
                 },
                 heal: function () {
-                    this.playerHealth += this.calculateDamage(3, 30);
-                    this.playerHealth += this.calculateDamage(3, 10);
+                    heal=this.calculateDamage(3, 10);
+                    this.playerHealth += heal
+                    this.turns.unshift({
+                        isPlayer: true,
+                        text: 'Player healed for ' + heal
+                    })
                     if (this.playerHealth <= 0) {
                         this.playerHealth = 0;
                         this.gameIsRunning = false;
