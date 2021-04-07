@@ -13,7 +13,7 @@
         <section class="row">
             <div class="small-6 columns">
                 <h1 class="text-center">YOU</h1>
-                <transition :enter-active-class="'animate__animated'+animationP">
+                <transition :enter-active-class="'animate' + animationP">
                     <img src="http://cdn.gamer-network.net/2018/metabomb/leagueoflegendshowtokiteorbwalkattackmove.jpg" width="1280" height="733" v-if="shakeP">
                 </transition>
                 <div class="healthbar">
@@ -25,7 +25,7 @@
             </div>
             <div class="small-6 columns">
                 <h1 class="text-center">MONSTER</h1>
-                <transition :enter-active-class="'animate__animated'+animationP">
+                <transition :enter-active-class="'animate' + animationP">
                     <img src="http://cdn.gamer-network.net/2018/metabomb/leagueoflegendsbestmousedpiandsettingsguide.jpg" width="1280" height="733" v-if="shakeP">
                 </transition>
                 <div class="healthbar">
@@ -107,7 +107,7 @@
                         text: 'Player hits Monster for ' + damagePlayer
                     })
                     
-                    this.animationP="animate__bounce"
+                    this.animationP="shake"
                     this.shakeP=!this.shakeP;
 
                     if (this.monsterHealth <= 0) {
