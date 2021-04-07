@@ -106,12 +106,14 @@
                         alert('Ganhou')
                         this.gameIsRunning = false;
                     }
+
                     damageMonster = this.calculateDamage(3, 10);
                     this.playerHealth -= damageMonster
                     this.turns.unshift({
                         isPlayer: false,
                         text: 'Monster hits Player for ' + damageMonster
                     })
+
                     if (this.playerHealth <= 0) {
                         this.playerHealth = 0;
                         alert('Perdeu')
@@ -125,19 +127,23 @@
                         isPlayer: true,
                         text: 'Player hits Monster for ' + damagePlayer
                     })
+
                     this.animationP = "animate_bounce"
                     this.shakeP = !this.shakeP;
+
                     if (this.monsterHealth <= 0) {
                         this.monsterHealth = 0;
                         alert('Ganhou')
                         this.gameIsRunning = false;
                     }
+
                     damageMonster = this.calculateDamage(3, 10);
                     this.playerHealth -= damageMonster
                     this.turns.unshift({
                         isPlayer: false,
                         text: 'Monster hits Player for ' + damageMonster
                     })
+
                     if (this.playerHealth <= 0) {
                         this.playerHealth = 0;
                         alert('Perdeu')
@@ -151,6 +157,7 @@
                         isPlayer: true,
                         text: 'Player healed for ' + heal
                     })
+
                     if (this.playerHealth <= 0) {
                         this.playerHealth = 0;
                         this.gameIsRunning = false;
